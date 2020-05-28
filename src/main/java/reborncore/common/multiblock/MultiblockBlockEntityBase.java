@@ -46,6 +46,8 @@ import java.util.Set;
  * abstract methods.
  */
 public abstract class MultiblockBlockEntityBase extends IMultiblockPart implements Tickable, UnloadHandler {
+	private final static String TAG_MULTIBLOCK_DATA = "multiblockData";
+
 	private MultiblockControllerBase controller;
 	private boolean visited;
 
@@ -119,8 +121,8 @@ public abstract class MultiblockBlockEntityBase extends IMultiblockPart implemen
 		// the data here until
 		// we receive a validate() call, which creates the controller and hands
 		// off the cached data.
-		if (data.contains("multiblockData")) {
-			this.cachedMultiblockData = data.getCompound("multiblockData");
+		if (data.contains(TAG_MULTIBLOCK_DATA)) {
+			this.cachedMultiblockData = data.getCompound(TAG_MULTIBLOCK_DATA);
 		}
 	}
 
@@ -131,7 +133,7 @@ public abstract class MultiblockBlockEntityBase extends IMultiblockPart implemen
 		if (isMultiblockSaveDelegate() && isConnected()) {
 			CompoundTag multiblockData = new CompoundTag();
 			this.controller.write(multiblockData);
-			data.put("multiblockData", multiblockData);
+			data.put(TAG_MULTIBLOCK_DATA, multiblockData);
 		}
 		return data;
 	}

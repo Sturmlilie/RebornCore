@@ -47,6 +47,9 @@ import java.util.List;
 
 public abstract class PowerAcceptorBlockEntity extends MachineBaseBlockEntity implements EnergyStorage, IListInfoProvider // TechReborn
 {
+	private final static String TAG_POWER_ACCEPTOR = "PowerAcceptor";
+	private final static String TAG_ENERGY = "energy";
+
 	private EnergyTier blockEntityPowerTier;
 	private double energy;
 
@@ -200,9 +203,9 @@ public abstract class PowerAcceptorBlockEntity extends MachineBaseBlockEntity im
 	@Override
 	public void fromTag(CompoundTag tag) {
 		super.fromTag(tag);
-		CompoundTag data = tag.getCompound("PowerAcceptor");
+		CompoundTag data = tag.getCompound(TAG_POWER_ACCEPTOR);
 		if (shouldHanldeEnergyNBT()) {
-			this.setEnergy(data.getDouble("energy"));
+			this.setEnergy(data.getDouble(TAG_ENERGY));
 		}
 	}
 
@@ -210,8 +213,8 @@ public abstract class PowerAcceptorBlockEntity extends MachineBaseBlockEntity im
 	public CompoundTag toTag(CompoundTag tag) {
 		super.toTag(tag);
 		CompoundTag data = new CompoundTag();
-		data.putDouble("energy", getEnergy());
-		tag.put("PowerAcceptor", data);
+		data.putDouble(TAG_ENERGY, getEnergy());
+		tag.put(TAG_POWER_ACCEPTOR, data);
 		return tag;
 	}
 

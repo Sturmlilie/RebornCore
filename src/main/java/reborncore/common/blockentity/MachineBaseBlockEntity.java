@@ -70,6 +70,11 @@ import java.util.Optional;
  */
 public class MachineBaseBlockEntity extends BlockEntity implements Tickable, IUpgradeable, IUpgradeHandler, IListInfoProvider, Inventory, SidedInventory {
 
+	private final static String TAG_SLOT_CONFIG = "slotConfig";
+	private final static String TAG_FLUID_CONFIG = "fluidConfig";
+	private final static String TAG_REDSTONE_CONFIG = "redstoneConfig";
+	private final static String TAG_UPGRADES = "Upgrades";
+
 	public RebornInventory<MachineBaseBlockEntity> upgradeInventory = new RebornInventory<>(getUpgradeSlotCount(), "upgrades", 1, this, (slotID, stack, face, direction, blockEntity) -> true);
 	private SlotConfiguration slotConfiguration;
 	public FluidConfiguration fluidConfiguration;
@@ -232,21 +237,21 @@ public class MachineBaseBlockEntity extends BlockEntity implements Tickable, IUp
 		if (getOptionalCrafter().isPresent()) {
 			getOptionalCrafter().get().read(tagCompound);
 		}
-		if (tagCompound.contains("slotConfig")) {
-			slotConfiguration = new SlotConfiguration(tagCompound.getCompound("slotConfig"));
+		if (tagCompound.contains(TAG_SLOT_CONFIG)) {
+			slotConfiguration = new SlotConfiguration(tagCompound.getCompound(TAG_SLOT_CONFIG));
 		} else {
 			if (getOptionalInventory().isPresent()) {
 				slotConfiguration = new SlotConfiguration(getOptionalInventory().get());
 			}
 		}
-		if (tagCompound.contains("fluidConfig")) {
-			fluidConfiguration = new FluidConfiguration(tagCompound.getCompound("fluidConfig"));
+		if (tagCompound.contains(TAG_FLUID_CONFIG)) {
+			fluidConfiguration = new FluidConfiguration(tagCompound.getCompound(TAG_FLUID_CONFIG));
 		}
-		if (tagCompound.contains("redstoneConfig")) {
+		if (tagCompound.contains(TAG_REDSTONE_CONFIG)) {
 			redstoneConfiguration.refreshCache();
-			redstoneConfiguration.read(tagCompound.getCompound("redstoneConfig"));
+			redstoneConfiguration.read(tagCompound.getCompound(TAG_REDSTONE_CONFIG));
 		}
-		upgradeInventory.read(tagCompound, "Upgrades");
+		upgradeInventory.read(tagCompound, TAG_UPGRADES);
 	}
 
 	@Override
@@ -259,13 +264,13 @@ public class MachineBaseBlockEntity extends BlockEntity implements Tickable, IUp
 			getOptionalCrafter().get().write(tagCompound);
 		}
 		if (slotConfiguration != null) {
-			tagCompound.put("slotConfig", slotConfiguration.write());
+			tagCompound.put(TAG_SLOT_CONFIG, slotConfiguration.write());
 		}
 		if (fluidConfiguration != null) {
-			tagCompound.put("fluidConfig", fluidConfiguration.write());
+			tagCompound.put(TAG_FLUID_CONFIG, fluidConfiguration.write());
 		}
-		upgradeInventory.write(tagCompound, "Upgrades");
-		tagCompound.put("redstoneConfig", redstoneConfiguration.write());
+		upgradeInventory.write(tagCompound, TAG_UPGRADES);
+		tagCompound.put(TAG_REDSTONE_CONFIG, redstoneConfiguration.write());
 		return tagCompound;
 	}
 
